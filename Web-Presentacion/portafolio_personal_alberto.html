@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es" class="modo-oscuro">
+<head>
+  <!-- Configuración básica de caracteres y adaptación a pantallas móviles -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alberto | Desarrollador Multiplataforma, Datos e IA</title>
+
+  <!-- Fuente limpia y moderna desde Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. VARIABLES DE COLOR Y DISEÑO (MODO OSCURO POR DEFECTO Y MODO CLARO)
+       ========================================================================== */
+    :root {
+      /* Colores para el modo claro */
+      --color-fondo: #f8fafc;
+      --color-fondo-tarjeta: #ffffff;
+      --color-fondo-secundario: #f1f5f9;
+      --color-texto-principal: #0f172a;
+      --color-texto-secundario: #475569;
+      --color-borde: #e2e8f0;
+      --color-acento: #0284c7;
+      --color-acento-secundario: #059669;
+      --color-texto-boton-acento: #ffffff;
+      --color-sombra: rgba(15, 23, 42, 0.08);
+      --fondo-cabecera: rgba(248, 250, 252, 0.85);
+    }
+
+    html.modo-oscuro {
+      /* Colores para el modo oscuro */
+      --color-fondo: #090d16;
+      --color-fondo-tarjeta: #111827;
+      --color-fondo-secundario: #1e293b;
+      --color-texto-principal: #f1f5f9;
+      --color-texto-secundario: #94a3b8;
+      --color-borde: #1e293b;
+      --color-acento: #38bdf8;
+      --color-acento-secundario: #34d399;
+      --color-texto-boton-acento: #090d16;
+      --color-sombra: rgba(0, 0, 0, 0.45);
+      --fondo-cabecera: rgba(9, 13, 22, 0.85);
+    }
+
+    /* ==========================================================================
+       2. ESTILOS GENERALES Y REINICIO BÁSICO
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--color-fondo);
+      color: var(--color-texto-principal);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* Contenedor central que limita el ancho máximo en pantallas grandes */
+    .contenedor-principal {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ==========================================================================
+       3. BARRA DE NAVEGACIÓN SUPERIOR FIJA
+       ========================================================================== */
+    .barra-navegacion {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: var(--fondo-cabecera);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-borde);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .contenido-navegacion {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .marca-personal {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .icono-marca {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--color-acento), var(--color-acento-secundario));
+      color: var(--color-texto-boton-acento);
+      font-weight: 700;
+    }
+
+    .punto-acento {
+      color: var(--color-acento);
+    }
+
+    .enlaces-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .enlace-navegacion {
+      padding: 0.5rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-texto-secundario);
+      transition: color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .enlace-navegacion:hover,
+    .enlace-navegacion.activo {
+      color: var(--color-acento);
+      background-color: var(--color-fondo-secundario);
+    }
+
+    .acciones-navegacion {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .boton-icono {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--color-borde);
+      background-color: var(--color-fondo-tarjeta);
+      color: var(--color-texto-principal);
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .boton-icono:hover {
+      border-color: var(--color-acento);
+      transform: translateY(-1px);
+    }
+
+    .boton-menu-movil {
+      display: none;
+    }
+
+    /* ==========================================================================
+       4. SECCIÓN DE PRESENTACIÓN ("SOBRE MÍ") Y FOTO DE PERFIL
+       ========================================================================== */
+    .seccion-presentacion {
+      padding: 7.5rem 0 4.5rem;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .rejilla-presentacion {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .etiqueta-ubicacion {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background-color: var(--color-fondo-tarjeta);
+      border: 1px solid var(--color-borde);
+      color: var(--color-texto-secundario);
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+
+    .titulo-principal {
+      font-size: clamp(2.3rem, 5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitulo-profesional {
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 600;
+      color: var(--color-acento);
+      margin-bottom: 1.25rem;
+    }
+
+    .descripcion-personal {
+      font-size: 1.02rem;
+      color: var(--color-texto-secundario);
+      margin-bottom: 1.75rem;
+      max-width: 600px;
+    }
+
+    .descripcion-personal strong {
+      color: var(--color-texto-principal);
+      font-weight: 600;
+    }
+
+    .grupo-botones-principales {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .boton-primario {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.4rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--color-acento), var(--color-acento-secundario));
+      color: var(--color-texto-boton-acento);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .boton-primario:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+    }
+
+    .boton-secundario {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.4rem;
+      border-radius: 12px;
+      background-color: var(--color-fondo-tarjeta);
+      color: var(--color-texto-principal);
+      border: 1px solid var(--color-borde);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .boton-secundario:hover {
+      border-color: var(--color-acento);
+      transform: translateY(-2px);
+    }
+
+    /* Columna derecha: Fotografía de perfil */
+    .columna-foto {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contenedor-foto {
+      position: relative;
+      width: 265px;
+      height: 265px;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 3px solid var(--color-borde);
+      background-color: var(--color-fondo-tarjeta);
+      box-shadow: 0 18px 38px var(--color-sombra);
+    }
+
+    .imagen-perfil {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top; /* Encuadra correctamente la parte superior del rostro */
+      display: block;
+    }
+
+    /* ==========================================================================
+       5. ESTILOS COMUNES PARA SECCIONES
+       ========================================================================== */
+    .seccion-bloque {
+      padding: 4.5rem 0;
+      border-top: 1px solid var(--color-borde);
+    }
+
+    .cabecera-seccion {
+      margin-bottom: 2.25rem;
+    }
+
+    .etiqueta-seccion {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-acento);
+      margin-bottom: 0.4rem;
+    }
+
+    .titulo-seccion {
+      font-size: clamp(1.7rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    /* ==========================================================================
+       6. SECCIÓN DE PROYECTOS Y FILTROS INTERACTIVOS
+       ========================================================================== */
+    .barra-filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .boton-filtro {
+      padding: 0.55rem 1.1rem;
+      border-radius: 12px;
+      border: 1px solid var(--color-borde);
+      background-color: var(--color-fondo-tarjeta);
+      color: var(--color-texto-secundario);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .boton-filtro:hover {
+      border-color: var(--color-acento);
+      color: var(--color-texto-principal);
+    }
+
+    .boton-filtro.activo {
+      background-color: var(--color-acento);
+      border-color: var(--color-acento);
+      color: var(--color-texto-boton-acento);
+    }
+
+    .cuadricula-proyectos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .tarjeta-proyecto {
+      background-color: var(--color-fondo-tarjeta);
+      border: 1px solid var(--color-borde);
+      border-radius: 20px;
+      padding: 1.65rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 8px 24px var(--color-sombra);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .tarjeta-proyecto:hover {
+      transform: translateY(-4px);
+      border-color: var(--color-acento);
+    }
+
+    .tarjeta-proyecto.oculta {
+      display: none;
+    }
+
+    .cabecera-tarjeta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .icono-proyecto {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background-color: var(--color-fondo-secundario);
+      color: var(--color-acento);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .etiqueta-categoria {
+      padding: 0.3rem 0.75rem;
+      border-radius: 8px;
+      background-color: var(--color-fondo-secundario);
+      color: var(--color-texto-secundario);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .titulo-proyecto {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .descripcion-proyecto {
+      font-size: 0.94rem;
+      color: var(--color-texto-secundario);
+      margin-bottom: 1.35rem;
+    }
+
+    .lista-etiquetas-tecnologia {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-borde);
+    }
+
+    .etiqueta-tecnologia {
+      padding: 0.28rem 0.65rem;
+      border-radius: 8px;
+      background-color: var(--color-fondo-secundario);
+      color: var(--color-acento);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       7. SECCIÓN DE TECNOLOGÍAS Y HABILIDADES
+       ========================================================================== */
+    .cuadricula-habilidades {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .tarjeta-habilidad {
+      background-color: var(--color-fondo-tarjeta);
+      border: 1px solid var(--color-borde);
+      border-radius: 20px;
+      padding: 1.6rem;
+      box-shadow: 0 8px 24px var(--color-sombra);
+    }
+
+    .titulo-bloque-habilidad {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--color-texto-principal);
+    }
+
+    .lista-habilidades {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .elemento-habilidad {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0.9rem;
+      border-radius: 12px;
+      background-color: var(--color-fondo-secundario);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .detalle-habilidad {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--color-acento-secundario);
+    }
+
+    /* ==========================================================================
+       8. SECCIÓN DE FORMACIÓN Y PERFIL (LÍNEA TEMPORAL)
+       ========================================================================== */
+    .linea-temporal {
+      position: relative;
+      padding-left: 1.75rem;
+      border-left: 2px solid var(--color-borde);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 780px;
+    }
+
+    .elemento-formacion {
+      position: relative;
+      background-color: var(--color-fondo-tarjeta);
+      border: 1px solid var(--color-borde);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px var(--color-sombra);
+    }
+
+    .punto-linea-temporal {
+      position: absolute;
+      left: -2.35rem;
+      top: 1.65rem;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: var(--color-acento);
+      border: 3px solid var(--color-fondo);
+    }
+
+    .etiqueta-formacion {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 8px;
+      background-color: var(--color-fondo-secundario);
+      color: var(--color-acento);
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+
+    .titulo-formacion {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .centro-formacion {
+      font-size: 0.92rem;
+      color: var(--color-texto-secundario);
+    }
+
+    /* ==========================================================================
+       9. SECCIÓN DE CONTACTO Y AVISO VISUAL (TOAST)
+       ========================================================================== */
+    .caja-contacto {
+      background-color: var(--color-fondo-tarjeta);
+      border: 1px solid var(--color-borde);
+      border-radius: 24px;
+      padding: 2.25rem;
+      box-shadow: 0 12px 30px var(--color-sombra);
+    }
+
+    .texto-contacto {
+      color: var(--color-texto-secundario);
+      max-width: 620px;
+      margin: 0.75rem 0 1.75rem;
+    }
+
+    .botones-contacto {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+
+    /* Aviso flotante en la esquina inferior derecha cuando se copia el correo */
+    .aviso-flotante {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.25rem;
+      border-radius: 14px;
+      background-color: var(--color-fondo-tarjeta);
+      color: var(--color-texto-principal);
+      border: 1px solid var(--color-acento-secundario);
+      box-shadow: 0 12px 28px var(--color-sombra);
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .aviso-flotante.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       10. PIE DE PÁGINA
+       ========================================================================== */
+    .pie-pagina {
+      border-top: 1px solid var(--color-borde);
+      padding: 2rem 0;
+      margin-top: 2rem;
+      color: var(--color-texto-secundario);
+      font-size: 0.88rem;
+    }
+
+    .contenido-pie {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    /* ==========================================================================
+       11. DISEÑO ADAPTABLE PARA TABLETS Y MÓVILES
+       ========================================================================== */
+    @media (max-width: 860px) {
+      .rejilla-presentacion {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2.25rem;
+      }
+
+      .columna-foto {
+        order: -1; /* En móvil, la foto aparece arriba */
+      }
+
+      .descripcion-personal {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .grupo-botones-principales {
+        justify-content: center;
+      }
+
+      .cuadricula-habilidades {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .cuadricula-proyectos {
+        grid-template-columns: 1fr;
+      }
+
+      .boton-menu-movil {
+        display: inline-flex;
+      }
+
+      .enlaces-menu {
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        background-color: var(--color-fondo-tarjeta);
+        border-bottom: 1px solid var(--color-borde);
+        padding: 1rem;
+      }
+
+      .enlaces-menu.abierto {
+        display: flex;
+      }
+
+      .contenedor-foto {
+        width: 220px;
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Aviso flotante que aparece al copiar el correo electrónico -->
+  <div id="aviso-flotante" class="aviso-flotante" role="status" aria-live="polite">
+    <span style="color: var(--color-acento-secundario);">✔</span>
+    <span id="texto-aviso">¡Correo copiado!</span>
+  </div>
+
+  <!-- ========================================================================
+       CABECERA Y BARRA DE NAVEGACIÓN
+       ======================================================================== -->
+  <header class="barra-navegacion">
+    <div class="contenedor-principal contenido-navegacion">
+      <!-- Logotipo con inicial y nombre -->
+      <a href="#inicio" class="marca-personal">
+        <span class="icono-marca">A</span>
+        <span>alberto<span class="punto-acento">.dev</span></span>
+      </a>
+
+      <!-- Enlaces de navegación entre secciones -->
+      <nav id="menu-principal" class="enlaces-menu" aria-label="Navegación principal">
+        <a href="#inicio" class="enlace-navegacion">Sobre mí</a>
+        <a href="#proyectos" class="enlace-navegacion">Proyectos</a>
+        <a href="#tecnologias" class="enlace-navegacion">Tecnologías</a>
+        <a href="#formacion" class="enlace-navegacion">Formación</a>
+        <a href="#contacto" class="enlace-navegacion">Contacto</a>
+      </nav>
+
+      <!-- Botones para cambiar el tema (claro/oscuro) y abrir menú en móvil -->
+      <div class="acciones-navegacion">
+        <button id="boton-tema" type="button" class="boton-icono" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar tema">
+          <span id="icono-tema">☀️</span>
+        </button>
+
+        <button id="boton-menu-movil" type="button" class="boton-icono boton-menu-movil" aria-label="Abrir menú de navegación" aria-expanded="false">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="contenedor-principal">
+
+    <!-- ======================================================================
+         1. SECCIÓN DE PRESENTACIÓN ("SOBRE MÍ")
+         ====================================================================== -->
+    <section id="inicio" class="seccion-presentacion">
+      <div class="rejilla-presentacion">
+        
+        <!-- Columna izquierda: Presentación textual -->
+        <div>
+          <div class="etiqueta-ubicacion">
+            <span>📍</span>
+            <span>Málaga, España</span>
+          </div>
+
+          <h1 class="titulo-principal">
+            Hola, soy Alberto<span class="punto-acento">.</span>
+          </h1>
+
+          <h2 class="subtitulo-profesional">
+            Desarrollo Multiplataforma (DAM) · Datos, Bases de Datos e Inteligencia Artificial
+          </h2>
+
+          <p class="descripcion-personal">
+            Estudiante de <strong>2º de Desarrollo de Aplicaciones Multiplataforma (DAM)</strong> y del <strong>Máster en Inteligencia Artificial y Big Data</strong>, con especial interés en el sector de los <strong>datos y las bases de datos</strong>. Combino el desarrollo backend y multiplataforma con la creatividad y disciplina de mi <strong>Grado Profesional de Música</strong>.
+          </p>
+
+          <div class="grupo-botones-principales">
+            <a href="#proyectos" class="boton-primario">Ver mis proyectos →</a>
+            <a href="#contacto" class="boton-secundario">Contactar</a>
+          </div>
+        </div>
+
+        <!-- Columna derecha: Fotografía de perfil sin opción interactiva de cambio -->
+        <div class="columna-foto">
+          <button type="button" id="boton-cambiar-foto" class="contenedor-foto">
+            <img
+              id="imagen-perfil"
+              src="IMG_5653.jpg"
+              alt="Fotografía de perfil de Alberto"
+              class="imagen-perfil"
+            />
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         2. SECCIÓN DE PROYECTOS CON FILTRO INTERACTIVO
+         ====================================================================== -->
+    <section id="proyectos" class="seccion-bloque">
+      <div class="cabecera-seccion">
+        <span class="etiqueta-seccion">Portafolio</span>
+        <h2 class="titulo-seccion">Proyectos Destacados</h2>
+      </div>
+
+      <!-- Botones para filtrar los proyectos por categoría -->
+      <div class="barra-filtros" role="group" aria-label="Filtrar proyectos por categoría">
+        <button type="button" class="boton-filtro activo" data-categoria="todos">Todos</button>
+        <button type="button" class="boton-filtro" data-categoria="aplicaciones">Aplicaciones</button>
+        <button type="button" class="boton-filtro" data-categoria="datos-ia">Datos e IA</button>
+        <button type="button" class="boton-filtro" data-categoria="gestion">Gestión</button>
+      </div>
+
+      <!-- Cuadrícula con los 4 proyectos -->
+      <div class="cuadricula-proyectos">
+
+              alt="Fotografía de perfil de Alberto"
+              class="imagen-perfil"
+              onerror="if (!this.dataset.intento) { this.dataset.intento = '1'; this.src = 'IMG_5653.jpg'; } else { this.onerror = null; this.src = 'https://placehold.co/400x400/111827/38bdf8?text=Alberto'; }"
+            />
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         2. SECCIÓN DE PROYECTOS CON FILTRO INTERACTIVO
+         ====================================================================== -->
+    <section id="proyectos" class="seccion-bloque">
+      <div class="cabecera-seccion">
+        <span class="etiqueta-seccion">Portafolio</span>
+        <h2 class="titulo-seccion">Proyectos Destacados</h2>
+      </div>
+
+      <!-- Botones para filtrar los proyectos por categoría -->
+      <div class="barra-filtros" role="group" aria-label="Filtrar proyectos por categoría">
+        <button type="button" class="boton-filtro activo" data-categoria="todos">Todos</button>
+        <button type="button" class="boton-filtro" data-categoria="aplicaciones">Aplicaciones</button>
+        <button type="button" class="boton-filtro" data-categoria="datos-ia">Datos e IA</button>
+        <button type="button" class="boton-filtro" data-categoria="gestion">Gestión</button>
+      </div>
+
+      <!-- Cuadrícula con los 4 proyectos -->
+      <div class="cuadricula-proyectos">
+
+        <!-- Proyecto 1: Musaic (Aplicaciones y Datos) -->
+        <article class="tarjeta-proyecto" data-categorias="aplicaciones datos-ia">
+          <div>
+            <div class="cabecera-tarjeta">
+              <div class="icono-proyecto" aria-hidden="true">🎵</div>
+              <span class="etiqueta-categoria">Aplicaciones · Datos</span>
+            </div>
+            <h3 class="titulo-proyecto">Musaic</h3>
+            <p class="descripcion-proyecto">
+              Aplicación de streaming musical con reconocimiento de audio en tiempo real y consulta de stock en tiendas de discos locales (proyecto intermodular de DAM).
+            </p>
+          </div>
+          <div class="lista-etiquetas-tecnologia">
+            <span class="etiqueta-tecnologia">Streaming</span>
+            <span class="etiqueta-tecnologia">Reconocimiento de Audio</span>
+            <span class="etiqueta-tecnologia">Bases de Datos</span>
+          </div>
+        </article>
+
+        <!-- Proyecto 2: YokaiInfection (Aplicaciones) -->
+        <article class="tarjeta-proyecto" data-categorias="aplicaciones">
+          <div>
+            <div class="cabecera-tarjeta">
+              <div class="icono-proyecto" aria-hidden="true">🎮</div>
+              <span class="etiqueta-categoria">Aplicaciones</span>
+            </div>
+            <h3 class="titulo-proyecto">YokaiInfection</h3>
+            <p class="descripcion-proyecto">
+              Videojuego multiplataforma con selección de personajes, gestión de audio y base de datos relacional SQL para guardar partidas y puntuaciones.
+            </p>
+          </div>
+          <div class="lista-etiquetas-tecnologia">
+            <span class="etiqueta-tecnologia">Java / Kotlin</span>
+            <span class="etiqueta-tecnologia">Audio</span>
+            <span class="etiqueta-tecnologia">SQL Relacional</span>
+          </div>
+        </article>
+
+        <!-- Proyecto 3: Clasificador de Visión Artificial (Datos e IA) -->
+        <article class="tarjeta-proyecto" data-categorias="datos-ia">
+          <div>
+            <div class="cabecera-tarjeta">
+              <div class="icono-proyecto" aria-hidden="true">👁️</div>
+              <span class="etiqueta-categoria">Datos e IA</span>
+            </div>
+            <h3 class="titulo-proyecto">Clasificador de Visión Artificial</h3>
+            <p class="descripcion-proyecto">
+              Modelo de aprendizaje automático para clasificación de imágenes entrenado para distinguir frutas (plátanos, sandías y melocotones) con alta precisión.
+            </p>
+          </div>
+          <div class="lista-etiquetas-tecnologia">
+            <span class="etiqueta-tecnologia">Machine Learning</span>
+            <span class="etiqueta-tecnologia">Visión Artificial</span>
+            <span class="etiqueta-tecnologia">Datasets</span>
+          </div>
+        </article>
+
+        <!-- Proyecto 4: Vitaly Gym (Gestión) -->
+        <article class="tarjeta-proyecto" data-categorias="gestion">
+          <div>
+            <div class="cabecera-tarjeta">
+              <div class="icono-proyecto" aria-hidden="true">🏋️</div>
+              <span class="etiqueta-categoria">Gestión</span>
+            </div>
+            <h3 class="titulo-proyecto">Vitaly Gym</h3>
+            <p class="descripcion-proyecto">
+              Implantación completa de ERP con Odoo Community para un centro deportivo, incluyendo clases semanales, horarios web, facturación y fidelización de clientes.
+            </p>
+          </div>
+          <div class="lista-etiquetas-tecnologia">
+            <span class="etiqueta-tecnologia">Odoo Community</span>
+            <span class="etiqueta-tecnologia">ERP</span>
+            <span class="etiqueta-tecnologia">Gestión Web</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. SECCIÓN DE TECNOLOGÍAS Y HABILIDADES
+         ====================================================================== -->
+    <section id="tecnologias" class="seccion-bloque">
+      <div class="cabecera-seccion">
+        <span class="etiqueta-seccion">Conocimientos Técnicos</span>
+        <h2 class="titulo-seccion">Tecnologías y Habilidades</h2>
+      </div>
+
+      <div class="cuadricula-habilidades">
+
+        <!-- Bloque 1: Bases de Datos y Datos -->
+        <div class="tarjeta-habilidad">
+          <h3 class="titulo-bloque-habilidad">🗄️ Bases de Datos y Datos</h3>
+          <ul class="lista-habilidades">
+            <li class="elemento-habilidad">
+              <span>SQL</span>
+              <span class="detalle-habilidad">Consultas y modelado</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>MySQL</span>
+              <span class="detalle-habilidad">Administración</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>Diseño Relacional</span>
+              <span class="detalle-habilidad">Normalización</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>Big Data e IA</span>
+              <span class="detalle-habilidad">Análisis y modelos</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Bloque 2: Desarrollo Backend y Multiplataforma -->
+        <div class="tarjeta-habilidad">
+          <h3 class="titulo-bloque-habilidad">💻 Backend y Multiplataforma</h3>
+          <ul class="lista-habilidades">
+            <li class="elemento-habilidad">
+              <span>Java</span>
+              <span class="detalle-habilidad">POO y Aplicaciones</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>Spring Boot</span>
+              <span class="detalle-habilidad">APIs y Backend</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>Kotlin (Android Studio)</span>
+              <span class="detalle-habilidad">Apps Móviles</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>JavaScript</span>
+              <span class="detalle-habilidad">Interactividad Web</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Bloque 3: Web, Sistemas y Herramientas -->
+        <div class="tarjeta-habilidad">
+          <h3 class="titulo-bloque-habilidad">🛠️ Web, Sistemas y Herramientas</h3>
+          <ul class="lista-habilidades">
+            <li class="elemento-habilidad">
+              <span>HTML5 y CSS3</span>
+              <span class="detalle-habilidad">Maquetación</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>XML</span>
+              <span class="detalle-habilidad">Interfaces y datos</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>Odoo ERP</span>
+              <span class="detalle-habilidad">Módulos y gestión</span>
+            </li>
+            <li class="elemento-habilidad">
+              <span>Git y GitHub</span>
+              <span class="detalle-habilidad">Control de versiones</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. SECCIÓN DE FORMACIÓN Y PERFIL
+         ====================================================================== -->
+    <section id="formacion" class="seccion-bloque">
+      <div class="cabecera-seccion">
+        <span class="etiqueta-seccion">Trayectoria</span>
+        <h2 class="titulo-seccion">Formación y Perfil</h2>
+      </div>
+
+      <div class="linea-temporal">
+
+        <div class="elemento-formacion">
+          <span class="punto-linea-temporal" aria-hidden="true"></span>
+          <span class="etiqueta-formacion">Formación Superior</span>
+          <h3 class="titulo-formacion">2º Curso de Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM)</h3>
+          <p class="centro-formacion">Davante MEDAC · Málaga</p>
+        </div>
+
+        <div class="elemento-formacion">
+          <span class="punto-linea-temporal" aria-hidden="true"></span>
+          <span class="etiqueta-formacion">Especialización</span>
+          <h3 class="titulo-formacion">Máster en Inteligencia Artificial y Big Data</h3>
+          <p class="centro-formacion">Aprendizaje automático, visión artificial y procesamiento de datos</p>
+        </div>
+
+        <div class="elemento-formacion">
+          <span class="punto-linea-temporal" aria-hidden="true"></span>
+          <span class="etiqueta-formacion">Formación Artística</span>
+          <h3 class="titulo-formacion">Grado Profesional de Música</h3>
+          <p class="centro-formacion">Conservatorio Profesional de Música · Disciplina, sensibilidad creativa y trabajo en equipo</p>
+        </div>
+
+        <div class="elemento-formacion">
+          <span class="punto-linea-temporal" aria-hidden="true"></span>
+          <span class="etiqueta-formacion">Idiomas</span>
+          <h3 class="titulo-formacion">Certificación de Inglés B1 y preparando el B2</h3>
+          <p class="centro-formacion">Comprensión de documentación técnica y comunicación profesional</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. SECCIÓN DE CONTACTO
+         ====================================================================== -->
+    <section id="contacto" class="seccion-bloque">
+      <div class="caja-contacto">
+        <span class="etiqueta-seccion">Contacto</span>
+        <h2 class="titulo-seccion">¿Hablamos?</h2>
+        <p class="texto-contacto">
+          Si quieres ponerte en contacto conmigo para colaborar en proyectos de desarrollo, bases de datos, inteligencia artificial o conocer más sobre mi trabajo, puedes copiar mi correo con un solo clic o visitar mis perfiles.
+        </p>
+
+        <div class="botones-contacto">
+          <!-- Botón interactivo que copia el correo al portapapeles -->
+          <button type="button" id="boton-copiar-correo" class="boton-primario" data-correo="albertomartinez2401@gmail.com">
+            ✉️ Copiar correo electrónico
+          </button>
+
+          <!-- Enlaces externos a GitHub y LinkedIn -->
+          <a href="https://github.com/AlbertoMC2401" target="_blank" rel="noopener noreferrer" class="boton-secundario">
+            💻 GitHub
+          </a>
+
+          <a href="https://www.linkedin.com/in/albertomartinezcarrasco/" target="_blank" rel="noopener noreferrer" class="boton-secundario">
+            💼 LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       PIE DE PÁGINA
+       ======================================================================== -->
+  <footer class="pie-pagina">
+    <div class="contenedor-principal contenido-pie">
+      <p>© <span id="anio-actual"></span> Alberto · Málaga, España</p>
+      <p>Portafolio personal hecho con HTML, CSS y JavaScript</p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       CÓDIGO JAVASCRIPT EN ESPAÑOL PARA LA INTERACTIVIDAD DE LA WEB
+       ======================================================================== -->
+  <script>
+    // Esperamos a que todo el documento HTML esté cargado antes de ejecutar el código
+    document.addEventListener('DOMContentLoaded', function () {
+
+      /* ----------------------------------------------------------------------
+         1. MOSTRAR EL AÑO ACTUAL AUTOMÁTICAMENTE EN EL PIE DE PÁGINA
+         ---------------------------------------------------------------------- */
+      const elementoAnio = document.getElementById('anio-actual');
+      if (elementoAnio) {
+        elementoAnio.textContent = new Date().getFullYear();
+      }
+
+      /* ----------------------------------------------------------------------
+         2. CAMBIO ENTRE MODO OSCURO Y MODO CLARO (GUARDADO EN LOCALSTORAGE)
+         ---------------------------------------------------------------------- */
+      const etiquetaHtml = document.documentElement;
+      const botonTema = document.getElementById('boton-tema');
+      const iconoTema = document.getElementById('icono-tema');
+      const CLAVE_TEMA = 'portafolio-alberto-tema';
+
+      // Función que actualiza el icono del botón según el tema activo
+      function actualizarIconoTema(esOscuro) {
+        iconoTema.textContent = esOscuro ? '☀️' : '🌙';
+      }
+
+      // Comprobamos si el usuario guardó anteriormente el modo claro
+      const temaGuardado = localStorage.getItem(CLAVE_TEMA);
+      if (temaGuardado === 'claro') {
+        etiquetaHtml.classList.remove('modo-oscuro');
+        actualizarIconoTema(false);
+      } else {
+        etiquetaHtml.classList.add('modo-oscuro');
+        actualizarIconoTema(true);
+      }
+
+      // Función que alterna entre modo claro y oscuro al pulsar el botón
+      function alternarTema() {
+        const esModoOscuro = etiquetaHtml.classList.toggle('modo-oscuro');
+        localStorage.setItem(CLAVE_TEMA, esModoOscuro ? 'oscuro' : 'claro');
+        actualizarIconoTema(esModoOscuro);
+      }
+
+      botonTema.addEventListener('click', alternarTema);
+
+      /* ----------------------------------------------------------------------
+         3. MENÚ DESPLEGABLE EN DISPOSITIVOS MÓVILES
+         ---------------------------------------------------------------------- */
+      const botonMenuMovil = document.getElementById('boton-menu-movil');
+      const menuPrincipal = document.getElementById('menu-principal');
+      const enlacesNavegacion = document.querySelectorAll('.enlace-navegacion');
+
+      botonMenuMovil.addEventListener('click', function () {
+        const estaAbierto = menuPrincipal.classList.toggle('abierto');
+        botonMenuMovil.setAttribute('aria-expanded', String(estaAbierto));
+      });
+
+      // Cerramos el menú móvil automáticamente al hacer clic en cualquier enlace
+      enlacesNavegacion.forEach(function (enlace) {
+        enlace.addEventListener('click', function () {
+          menuPrincipal.classList.remove('abierto');
+          botonMenuMovil.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      /* ----------------------------------------------------------------------
+         4. AVISO VISUAL FLOTANTE (SUBSTITUYE A ALERT())
+         ---------------------------------------------------------------------- */
+      const avisoFlotante = document.getElementById('aviso-flotante');
+      const textoAviso = document.getElementById('texto-aviso');
+      let temporizadorAviso = null;
+
+      function mostrarAvisoVisual(mensaje) {
+        textoAviso.textContent = mensaje;
+        avisoFlotante.classList.add('visible');
+
+        // Si ya había un aviso activo, reiniciamos su tiempo
+        clearTimeout(temporizadorAviso);
+        temporizadorAviso = setTimeout(function () {
+          avisoFlotante.classList.remove('visible');
+        }, 2800);
+      }
+
+      /* ----------------------------------------------------------------------
+         5. FILTRADO INTERACTIVO DE PROYECTOS POR CATEGORÍA
+         ---------------------------------------------------------------------- */
+      const botonesFiltro = document.querySelectorAll('.boton-filtro');
+      const tarjetasProyecto = document.querySelectorAll('.tarjeta-proyecto');
+
+      function filtrarProyectos(categoriaSeleccionada) {
+        tarjetasProyecto.forEach(function (tarjeta) {
+          const categoriasDeTarjeta = tarjeta.getAttribute('data-categorias') || '';
+
+          if (categoriaSeleccionada === 'todos' || categoriasDeTarjeta.includes(categoriaSeleccionada)) {
+            tarjeta.classList.remove('oculta');
+          } else {
+            tarjeta.classList.add('oculta');
+          }
+        });
+      }
+
+      botonesFiltro.forEach(function (boton) {
+        boton.addEventListener('click', function () {
+          // Quitamos la clase 'activo' de todos los botones y se la ponemos al pulsado
+          botonesFiltro.forEach(function (b) {
+            b.classList.remove('activo');
+          });
+          boton.classList.add('activo');
+
+          const categoriaElegida = boton.getAttribute('data-categoria');
+          filtrarProyectos(categoriaElegida);
+        });
+      });
+
+      /* ----------------------------------------------------------------------
+         6. COPIAR EL CORREO ELECTRÓNICO AL PORTAPAPELES
+         ---------------------------------------------------------------------- */
+      const botonCopiarCorreo = document.getElementById('boton-copiar-correo');
+
+      function copiarCorreoAlPortapapeles() {
+        const direccionCorreo = botonCopiarCorreo.getAttribute('data-correo');
+
+        // Creamos un campo de texto temporal para copiar de forma compatible en cualquier navegador
+        const campoTemporal = document.createElement('textarea');
+        campoTemporal.value = direccionCorreo;
+        campoTemporal.style.position = 'fixed';
+        campoTemporal.style.left = '-9999px';
+        document.body.appendChild(campoTemporal);
+        campoTemporal.select();
+
+        try {
+          document.execCommand('copy');
+          mostrarAvisoVisual('¡Correo copiado!');
+        } catch (error) {
+          mostrarAvisoVisual('No se pudo copiar el correo automáticamente.');
+        }
+
+        document.body.removeChild(campoTemporal);
+      }
+
+      botonCopiarCorreo.addEventListener('click', copiarCorreoAlPortapapeles);
+
+    });
+  </script>
+</body>
+</html>
